@@ -1,0 +1,45 @@
+<html>
+<head></head>
+
+<body>
+
+    <h1 style="text-align : center">EXERCISE TRACKER</h1>
+    <div>
+      <form style="background-color : red ; text-align: center;padding :5%" method="POST" action="/api/users">
+          <label for="username" >Username</label>
+          <input type="text"   id="username" name="username" />
+          <br />
+          <input style="justify-content :center" type="submit" value="Submit"/>
+      </form>
+     
+       <form id="exercise-form" style="background-color : yellow ; text-align: center;padding :5%" method="POST" action="/api/users/:_id/exercises">
+           <label for=":_id" >_Id</label>
+          <input type="text"   id="uid" name=":_id" />
+          <br />
+          <label for="description" >Description</label>
+          <input type="text"   id="description" name="description" />
+          <br />
+           <label for="duration" >Duration</label>
+          <input type="text"   id="duration" name="duration" />
+          <br />
+           <label for="date" >Date</label>
+          <input type="text"   id="date" name="date" />
+          <br />
+          <input style="justify-content :center" type="submit" value="Submit"/>
+      </form>
+      <script>
+        const exerciseForm = document.getElementById("exercise-form");
+
+      exerciseForm.addEventListener("submit", () => {
+        const userId = document.getElementById("uid").value;
+        exerciseForm.action = `/api/users/${userId}/exercises`;
+
+        exerciseForm.submit();
+      });
+    
+      </script>
+
+    </div>
+</body>
+
+</html>
