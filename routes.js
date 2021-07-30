@@ -4,7 +4,10 @@ const db = require(__dirname + '/db.js');
 
      let DAYS = ["Sun","Mon" , "Tue" , "Wed" , "Thu" , "Fri" , "Sat" ];
      let MONTHS = ["Jan" , "Feb" , "Mar" , "Apr" , "May" , "Jun" , "Jul" , "Aug" , "Sep" , "Oct" , "Nov" , "Dec"];
-   
+router.get("/api/time" , function(req,res){
+  let date = new Date();
+  res.send({time : date.getTime()})
+})   
 router.post("/api/users" , async function(req,res){
     let obj = {
       username : req.body.username,
@@ -40,7 +43,7 @@ router.post("/api/users/:_id/exercises" , async function(req,res){
         newdate = new Date(req.body.date);
         
      }else{
-        newdate = new Date();
+        newdate = new Date(1627648297982);
         
      }
     
@@ -48,20 +51,28 @@ router.post("/api/users/:_id/exercises" , async function(req,res){
     
       dataobj.date= newdate;
      const data = await db.post_a_exercise(req.params._id , dataobj);
-     if(!data){return {"error" : "no suchj record"}};
+     console.log(data);
+     if(data==undefined){return res.send({"error" : "no such record"})}
+     if(!data){return res.send({"error" : "no suchj record"})};
         let tar = data.exercises[data.exercises.length-1];
         let finaldate=  new Date(tar.date);
         let day = DAYS[finaldate.getDay()].toString();
      let month = MONTHS[finaldate.getMonth()].toString();
      let idate = finaldate.getDate().toString();
+     if(idate.length == 1){
+       idate = "0"+idate;
+     }
       let year = finaldate.getFullYear().toString();
     let datestr = day + " " + month + " " + idate + " " + year;
         const toreturn= {
-          _id : data._id,
-          username : data.username,
           date : datestr,
-          duration : dataobj.duration,
-          description : dataobj.description
+         
+          
+          description : dataobj.description,
+          duration : dataobj.duration, 
+         
+          username : data.username,
+          _id : data._id, 
 
 
 
@@ -69,7 +80,7 @@ router.post("/api/users/:_id/exercises" , async function(req,res){
      
       
         
-        res.send(toreturn);
+        res.json(toreturn);
 })
 
 router.delete("/api/flush" , async function (req,res){
